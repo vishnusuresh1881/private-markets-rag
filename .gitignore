@@ -1,0 +1,7 @@
+.env
+docs/*.pdf
+docs/*.txt
+index/
+results/
+__pycache__/
+.venv/

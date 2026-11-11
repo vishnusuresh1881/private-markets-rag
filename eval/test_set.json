@@ -1,0 +1,249 @@
+[
+  {
+    "id": "q01",
+    "type": "answerable",
+    "question": "What is the definition of fair value?",
+    "expected_answer": "The price that would be received to sell an asset in an orderly transaction between market participants at the measurement date.",
+    "expected_phrases": [
+      "price that would be received to sell an asset in an orderly transaction"
+    ]
+  },
+  {
+    "id": "q02",
+    "type": "answerable",
+    "question": "What was 3i's total return for the year to 31 March 2026?",
+    "expected_answer": "22% of opening shareholders' funds (25% in 2025).",
+    "expected_phrases": [
+      "total return as a % of opening shareholders"
+    ]
+  },
+  {
+    "id": "q03",
+    "type": "answerable",
+    "question": "What is a monitoring fee offset in the ILPA reporting template?",
+    "expected_answer": "An offset (gross of any unapplied balance) for fees or expenses, including accelerated monitoring fees, paid to the investment adviser or its related persons.",
+    "expected_phrases": [
+      "monitoring fee offset"
+    ]
+  },
+  {
+    "id": "q04",
+    "type": "answerable",
+    "question": "How much carried interest does 3i typically accrue on its Private Equity vintages?",
+    "expected_answer": "About 10-12% of the relevant carry vintages' gross investment return once the performance hurdle is met.",
+    "expected_phrases": [
+      "net carried interest payable of c.10-12%"
+    ]
+  },
+  {
+    "id": "q05",
+    "type": "unanswerable",
+    "question": "What is the UK statutory maternity pay rate?",
+    "expected_answer": "",
+    "expected_phrases": []
+  },
+  {
+    "id": "q06",
+    "type": "answerable",
+    "question": "What is the definition of unit of account?",
+    "expected_answer": "An accounting term for the level at which an asset is aggregated or disaggregated for fair value recognition purposes.",
+    "expected_phrases": [
+      "identifies the level at which an asset is aggregated or disaggregated"
+    ]
+  },
+  {
+    "id": "q07",
+    "type": "answerable",
+    "question": "What is backtesting in private equity valuation?",
+    "expected_answer": "Understanding the substantive differences between the exit price and the previous fair value assessment, to improve future valuations.",
+    "expected_phrases": [
+      "this concept is known as backtesting"
+    ]
+  },
+  {
+    "id": "q08",
+    "type": "answerable",
+    "question": "What is calibration in private equity valuation?",
+    "expected_answer": "When the entry price is fair value, checking that the valuation techniques using market inputs at the investment date reproduce that price, so the same techniques can be used at later measurement dates.",
+    "expected_phrases": [
+      "this process is known as calibration"
+    ]
+  },
+  {
+    "id": "q09",
+    "type": "answerable",
+    "question": "Can AI tools replace professional judgement when valuing investments?",
+    "expected_answer": "No. AI can augment the valuation process when used with appropriate professional judgement, and the valuer remains fully accountable for all inputs, outputs and conclusions, including those from AI.",
+    "expected_phrases": [
+      "ai is a tool that can augment the valuation process"
+    ]
+  },
+  {
+    "id": "q10",
+    "type": "answerable",
+    "question": "What is an orderly transaction?",
+    "expected_answer": "A transaction that assumes exposure to the market for a usual and customary marketing period before the measurement date; it is not a forced transaction.",
+    "expected_phrases": [
+      "assumes exposure to the market for a period prior to the measurement date"
+    ]
+  },
+  {
+    "id": "q11",
+    "type": "answerable",
+    "question": "What waterfall structure does ILPA consider best practice?",
+    "expected_answer": "A whole of fund (all contributions plus preferred return back first) waterfall, where LPs get all committed capital back before the GP accrues carried interest.",
+    "expected_phrases": [
+      "whole of fund"
+    ]
+  },
+  {
+    "id": "q12",
+    "type": "answerable",
+    "question": "How much of the fees charged to portfolio companies should be offset against the management fee?",
+    "expected_answer": "100%. Any portfolio company fees should be fully offset against the management fee.",
+    "expected_phrases": [
+      "100% offset against the management fee"
+    ]
+  },
+  {
+    "id": "q13",
+    "type": "answerable",
+    "question": "What LP vote should be enough to remove the GP without cause?",
+    "expected_answer": "A super majority, a vote of two-thirds in interest of LPs, for no fault removal of the GP or dissolution of the fund.",
+    "expected_phrases": [
+      "two-thirds in interest of lps, should be sufficient for the no fault removal"
+    ]
+  },
+  {
+    "id": "q14",
+    "type": "answerable",
+    "question": "How long should a subscription line of credit be outstanding?",
+    "expected_answer": "They should be short duration, e.g. outstanding for no more than 180 days, and limited to a maximum percentage of commitments, e.g. 20%.",
+    "expected_phrases": [
+      "outstanding for no more than 180 days"
+    ]
+  },
+  {
+    "id": "q15",
+    "type": "answerable",
+    "question": "How soon after quarter-end should a direct fund deliver its quarterly report?",
+    "expected_answer": "ILPA suggests 60 days after quarter-end (120 days after fiscal year-end) for direct funds, deferring to the fund's governing documents.",
+    "expected_phrases": [
+      "direct funds: 60 days following quarter-end"
+    ]
+  },
+  {
+    "id": "q16",
+    "type": "answerable",
+    "question": "Is there a limit on how much can be reported in the 'Other' expense line of the reporting template?",
+    "expected_answer": "Yes, the 'Other' line is capped at 5% of total fund expenses; anything above that should be footnoted.",
+    "expected_phrases": [
+      "upper limit to the amount of total fund expenses"
+    ]
+  },
+  {
+    "id": "q17",
+    "type": "answerable",
+    "question": "What are placement fees?",
+    "expected_answer": "Fees or costs paid to the investment adviser, its related persons or outside parties for fundraising services.",
+    "expected_phrases": [
+      "for fundraising services"
+    ]
+  },
+  {
+    "id": "q18",
+    "type": "answerable",
+    "question": "What was 3i's NAV per share at the end of FY2026?",
+    "expected_answer": "3,030 pence.",
+    "expected_phrases": [
+      "nav per share of 3,030 pence"
+    ]
+  },
+  {
+    "id": "q19",
+    "type": "answerable",
+    "question": "How can a valuer check whether past valuations were accurate compared with what investments actually sold for?",
+    "expected_answer": "Through backtesting: comparing the exit price with the previous fair value assessment and understanding the differences.",
+    "expected_phrases": [
+      "this concept is known as backtesting"
+    ]
+  },
+  {
+    "id": "q20",
+    "type": "unanswerable",
+    "question": "In what year was ILPA founded?",
+    "expected_answer": "",
+    "expected_phrases": []
+  },
+  {
+    "id": "q21",
+    "type": "unanswerable",
+    "question": "How much does annual ILPA membership cost?",
+    "expected_answer": "",
+    "expected_phrases": []
+  },
+  {
+    "id": "q22",
+    "type": "unanswerable",
+    "question": "What preferred return percentage does ILPA recommend for private equity funds?",
+    "expected_answer": "",
+    "expected_phrases": []
+  },
+  {
+    "id": "q23",
+    "type": "unanswerable",
+    "question": "How should a fund value its bitcoin holdings?",
+    "expected_answer": "",
+    "expected_phrases": []
+  },
+  {
+    "id": "q24",
+    "type": "multi_passage",
+    "question": "What range of management fee offsets is typical, and what counts as a monitoring fee offset in the reporting template?",
+    "expected_answer": "Offsets are typically 60-100%, with LPs preferring 100%; a monitoring fee offset is the offset for fees/expenses, including accelerated monitoring fees, paid to the investment adviser or its related persons.",
+    "expected_phrases": [
+      "typically 60-100%, with 100% offset preferred by lps",
+      "monitoring fee offset"
+    ]
+  },
+  {
+    "id": "q25",
+    "type": "multi_passage",
+    "question": "Who oversees 3i's valuation policy, and what review practices are recommended as best practice for private equity valuations?",
+    "expected_answer": "3i's Board is responsible, with oversight and annual review by the Valuations Committee; best practice includes review by an independent internal valuation committee and/or external advisers, plus backtesting.",
+    "expected_phrases": [
+      "additional oversight and annual review from the valuations committee",
+      "independent internal valuation committee"
+    ]
+  },
+  {
+    "id": "q26",
+    "type": "multi_passage",
+    "question": "What is the difference between due diligence expenses and broken deal expenses in the reporting template?",
+    "expected_answer": "Both cover costs of confirming assumptions about potential investments; due diligence covers deals that complete (consummated), broken deals covers deals that do not (unconsummated).",
+    "expected_phrases": [
+      "ends as a consummated deal",
+      "ends as an unconsummated deal"
+    ]
+  },
+  {
+    "id": "q27",
+    "type": "multi_passage",
+    "question": "What was 3i's total dividend for FY2026, and how much did it invest in Action during the year?",
+    "expected_answer": "A total dividend of 84.5 pence per share, and a total investment of £2.6 billion in Action.",
+    "expected_phrases": [
+      "take the total dividend to 84.5 pence",
+      "total investment of £2.6 billion"
+    ]
+  },
+  {
+    "id": "q28",
+    "type": "multi_passage",
+    "question": "What does ILPA recommend for holding carried interest in escrow, and how should clawback liabilities be minimised?",
+    "expected_answer": "Hold accrued carry in escrow with significant reserves (e.g. 30% of carry distributions or more); minimise clawback with an all capital back waterfall.",
+    "expected_phrases": [
+      "30% of carry distributions or more",
+      "all capital back"
+    ]
+  }
+]

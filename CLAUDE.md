@@ -55,14 +55,14 @@ than speed.
 | chunk180 | 180-word chunks | 61% (only q10 flipped: truncation theory only partly right) |
 | chunk180-k8 | top 8 | 78% (confirms crowding: right passage ranked 5th-8th) |
 | chunk180-bm25 | keyword search, top 4 | 65% (wins on specific terms q12/q17/q24, loses q01/q02) |
+| chunk180-hybrid | RRF of embeddings + BM25, top 4 | 74% (fixes q25 and q02; loses q01: BM25 drags the answer chunk from rank 4 to 8) |
 
-Missed by both embeddings and BM25: q06, q18, q19, q25, q27, q28.
-Current config: CHUNK_WORDS 180, OVERLAP 30, TOP_K 4, RETRIEVAL_MODE "bm25".
+Missed by hybrid: q01, q06, q18, q19, q27, q28 (q25 was the only "missed by both" case fusion fixed).
+Current config: CHUNK_WORDS 180, OVERLAP 30, TOP_K 4, RETRIEVAL_MODE "hybrid".
 
 ## Next steps (in order)
-1. Hybrid search: write reciprocal rank fusion in rag/retrieve.py (`_rrf` plus an
-   `elif mode == "hybrid"` branch); run with --no-llm. If it beats 61% and 65% at top 4,
-   run the full evaluation.
+1. Hybrid search: DONE (Day 3), `_rrf` and the hybrid branch in rag/retrieve.py, 74% at top 4.
+   Still to do: run the full evaluation (`--label chunk180-hybrid-full`).
 2. Optional experiment: cross-encoder reranker (retrieve 20, rerank to 4). Likely fix for
    crowding misses like q06 and q18.
 3. README: results table, three failure analyses, known limits, and "what I'd change for

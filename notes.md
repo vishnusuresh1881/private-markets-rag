@@ -51,4 +51,32 @@ ILPA Template FAQs v1.1, 3i Group Annual Report FY2026. 760 chunks, 384-dimensio
 
 ## Day 2
 
-## Day 3
+## Day 3 (11 Nov 2026): hybrid search
+
+### 8. Hybrid search with reciprocal rank fusion (RRF): 74% at top 4
+- Added `_rrf` and a `hybrid` mode in rag/retrieve.py. Each chunk's score is
+  sum of 1/(60 + rank) over both retrievers. Uses ranks, not raw scores, because cosine
+  (0-1) and BM25 (unbounded, varies per query) are on different scales.
+- Retrieval: embeddings 61%, BM25 65%, hybrid 74%, embeddings at top 8 78%. Hybrid gets
+  almost the top-8 result while still sending only 4 chunks to the model (less noise, fewer tokens).
+- Fixed: q25 (missed by both before), q02, and kept BM25's wins on q12/q17/q24.
+- Still missed: q06, q18, q19, q27, q28. q27/q28 are two-part questions; q06/q18 look
+  like crowding cases for a reranker.
+- Key line: `ranks[order] = np.arange(1, n + 1)`. argsort gives order (position -> chunk),
+  RRF needs rank (chunk -> position). Ranks start at 1.
+- Why consensus wins: with 760 chunks, rank 1 + rank 500 scores ~0.018, but rank 5 in both
+  scores ~0.031. (On a 3-chunk toy example it is nearly a tie, so the toy example misleads.)
+
+### 9. Failure story: hybrid lost q01 ("What is the definition of fair value?")
+- Answer chunk (IPEV p75): embeddings rank 4 (just inside), BM25 not in the top 8,
+  hybrid rank 8.
+- Cause: "fair" and "value" appear on nearly every page of a valuation guideline, so their
+  IDF is low and BM25 can't separate chunks. RRF trusts both retrievers equally, so a
+  retriever that is guessing pulls the good result down.
+- Ideas: weighted RRF, or a cross-encoder reranker after fusion (Next step 2).
+
+### 10. Process lessons
+- One results file is labelled chunk180-bm25 but its config says RETRIEVAL_MODE "embed".
+  Checking the config line in each result catches this; the label alone can't be trusted.
+- VS Code saved a stale copy of retrieve.py over a fix (indentation error came back).
+  If a file changed on disk, reload it before saving.

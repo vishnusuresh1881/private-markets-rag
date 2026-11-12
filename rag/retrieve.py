@@ -35,6 +35,18 @@ def _embed_scores(query: str, emb):
     q = _cache["model"].encode([query], normalize_embeddings=True)[0]
     return emb @ q  # cosine similarity because vectors are normalised
 
+def _rrf(score_lists, rrf_k: int = 60):
+    """Reciprocal rank fusion: combine several score arrays (one score per chunk,
+    same chunk order) into one fused array. Uses ranks, not raw scores, so methods
+    with different scales (cosine 0-1, BM25 unbounded) can be combined fairly."""
+    fused = np.zeros(len(score_lists[0]))
+    for scores in score_lists:
+        order = np.argsort(scores)[::-1]
+        ranks = np.empty(len(scores), dtype=int)
+        ranks[order] = np.arange(1, len(scores) + 1)
+        fused += 1.0 / (rrf_k + ranks)
+    return fused
+
 
 def retrieve(query: str, k: int = None, mode: str = None):
     """Return a list of chunk dicts (with a 'score' added), best first."""
@@ -48,9 +60,10 @@ def retrieve(query: str, k: int = None, mode: str = None):
         scores = _embed_scores(query, emb)
     elif mode == "bm25":
         scores = _bm25_scores(query, chunks)
-    # TODO (Day 3 experiment): add mode == "hybrid".
-    # Idea: rank chunks by each method, then combine with reciprocal rank fusion:
-    #   score(chunk) = 1/(60 + rank_embed) + 1/(60 + rank_bm25)
+    elif mode == "hybrid":
+        if emb is None:
+            raise SystemExit("No embeddings found. Run `python -m rag.ingest` first.")
+        scores = _rrf([_embed_scores(query, emb), _bm25_scores(query, chunks)])
     else:
         raise ValueError(f"Unknown retrieval mode: {mode}")
     top = np.argsort(scores)[::-1][:k]

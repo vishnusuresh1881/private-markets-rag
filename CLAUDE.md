@@ -49,22 +49,27 @@ than speed.
     python -m eval.compare
 
 ## Results so far (retrieval hit rate, 23 answerable + multi-passage cases)
-| Run | Change | Retrieval |
-|---|---|---|
-| baseline | 350-word chunks, embeddings, top 4 | 57% (answers 70% correct, refusals 100%, citations 100%) |
-| chunk180 | 180-word chunks | 61% (only q10 flipped: truncation theory only partly right) |
-| chunk180-k8 | top 8 | 78% (confirms crowding: right passage ranked 5th-8th) |
-| chunk180-bm25 | keyword search, top 4 | 65% (wins on specific terms q12/q17/q24, loses q01/q02) |
-| chunk180-hybrid | RRF of embeddings + BM25, top 4 | 74% (fixes q25 and q02; loses q01: BM25 drags the answer chunk from rank 4 to 8) |
+Day 3 metric fix: expected_phrases can now list alternative phrasings of the same fact (the
+old exact-phrase check counted correct retrievals as misses). "Old" = old metric, kept for history.
 
-Missed by hybrid: q01, q06, q18, q19, q27, q28 (q25 was the only "missed by both" case fusion fixed).
+| Run | Change | Old | Corrected | Still missed (corrected) |
+|---|---|---|---|---|
+| baseline | 350-word chunks, embeddings, top 4 | 57% | 70% | q10, q12, q17, q19, q24, q25, q27 (answers 70% correct, refusals 100%, citations 100%) |
+| chunk180 | 180-word chunks | 61% | 74% | q12, q17, q19, q24, q25, q27 |
+| chunk180-k8 | top 8 | 78% | 91% | q17, q27 |
+| chunk180-bm25 | keyword search, top 4 | 65% | 78% | q02, q19, q25, q27, q28 |
+| chunk180-hybrid | RRF of embeddings + BM25, top 4 | 74% | **96%** | q27 only |
+
+Hybrid full run: answers 96% correct (100% partial or better), refusals 100%, citations 100% (70/70).
+Corrected numbers come from the v2- result files in results/ (old-metric runs in results/old_metric/).
 Current config: CHUNK_WORDS 180, OVERLAP 30, TOP_K 4, RETRIEVAL_MODE "hybrid".
 
 ## Next steps (in order)
-1. Hybrid search: DONE (Day 3), `_rrf` and the hybrid branch in rag/retrieve.py, 74% at top 4.
-   Still to do: run the full evaluation (`--label chunk180-hybrid-full`).
-2. Optional experiment: cross-encoder reranker (retrieve 20, rerank to 4). Likely fix for
-   crowding misses like q06 and q18.
+1. Hybrid search: DONE (Day 3). 96% retrieval, 96% answers correct (full run done).
+   Result files re-run with the corrected metric (v2- labels).
+2. Optional experiment: the only remaining miss is q27, a two-part question. Query
+   decomposition (one search per part) fits it better than a cross-encoder reranker, which
+   was planned for q01/q06/q18 before those turned out to be metric false negatives.
 3. README: results table, three failure analyses, known limits, and "what I'd change for
    production" (pgvector, reranking, monitoring, cost, access control, secrets management).
    Then make the GitHub repo public and add the link to my CV.

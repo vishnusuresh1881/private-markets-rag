@@ -5,6 +5,7 @@ Run:
   python -m eval.run_eval --no-llm --label retrieval # retrieval only, free and fast
 
 Each test case has expected_phrases: short strings that must appear in the retrieved text.
+An entry can be a list of alternatives (same fact stated on different pages; any one counts).
 Using phrases (not chunk ids) means your test set still works after you change chunk size.
 """
 import argparse
@@ -24,9 +25,16 @@ Reply with JSON only: {"verdict": "correct|partial|incorrect", "reason": "one se
 
 
 def retrieval_hit(case, chunks) -> bool:
-    """True if EVERY expected phrase appears in at least one retrieved chunk."""
+    """True if EVERY expected fact appears in at least one retrieved chunk.
+    A fact is a phrase, or a list of alternative phrases when the documents state the
+    same fact in several places (any one counts)."""
     text = " ".join(_norm(c["text"]) for c in chunks)
-    return all(_norm(p) in text for p in case["expected_phrases"])
+
+    def found(fact):
+        alternatives = fact if isinstance(fact, list) else [fact]
+        return any(_norm(p) in text for p in alternatives)
+
+    return all(found(f) for f in case["expected_phrases"])
 
 
 def judge(case, model_answer: str, llm) -> dict:

@@ -5,7 +5,10 @@
     "question": "What is the definition of fair value?",
     "expected_answer": "The price that would be received to sell an asset in an orderly transaction between market participants at the measurement date.",
     "expected_phrases": [
-      "price that would be received to sell an asset in an orderly transaction"
+      [
+        "price that would be received to sell an asset in an orderly transaction",
+        "price that would be received to sell an asset or paid to transfer a liability in an orderly transaction"
+      ]
     ]
   },
   {
@@ -48,7 +51,10 @@
     "question": "What is the definition of unit of account?",
     "expected_answer": "An accounting term for the level at which an asset is aggregated or disaggregated for fair value recognition purposes.",
     "expected_phrases": [
-      "identifies the level at which an asset is aggregated or disaggregated"
+      [
+        "identifies the level at which an asset is aggregated or disaggregated",
+        "assets and liabilities are to be aggregated or disaggregated"
+      ]
     ]
   },
   {
@@ -156,7 +162,11 @@
     "question": "What was 3i's NAV per share at the end of FY2026?",
     "expected_answer": "3,030 pence.",
     "expected_phrases": [
-      "nav per share of 3,030 pence"
+      [
+        "nav per share of 3,030 pence",
+        "3,030p nav per share",
+        "increased to 3,030 pence per share"
+      ]
     ]
   },
   {
@@ -165,7 +175,10 @@
     "question": "How can a valuer check whether past valuations were accurate compared with what investments actually sold for?",
     "expected_answer": "Through backtesting: comparing the exit price with the previous fair value assessment and understanding the differences.",
     "expected_phrases": [
-      "this concept is known as backtesting"
+      [
+        "this concept is known as backtesting",
+        "backtesting seeks to: i. articulate what information was known or knowable"
+      ]
     ]
   },
   {
@@ -232,8 +245,16 @@
     "question": "What was 3i's total dividend for FY2026, and how much did it invest in Action during the year?",
     "expected_answer": "A total dividend of 84.5 pence per share, and a total investment of £2.6 billion in Action.",
     "expected_phrases": [
-      "take the total dividend to 84.5 pence",
-      "total investment of £2.6 billion"
+      [
+        "take the total dividend to 84.5 pence",
+        "total fy2026 dividend of 84.5 pence",
+        "taking the total dividend for the year to 84.5 pence",
+        "total dividend 84.5p"
+      ],
+      [
+        "total investment of £2.6 billion",
+        "£2.6 billion of capital to invest into action"
+      ]
     ]
   },
   {
@@ -242,7 +263,10 @@
     "question": "What does ILPA recommend for holding carried interest in escrow, and how should clawback liabilities be minimised?",
     "expected_answer": "Hold accrued carry in escrow with significant reserves (e.g. 30% of carry distributions or more); minimise clawback with an all capital back waterfall.",
     "expected_phrases": [
-      "30% of carry distributions or more",
+      [
+        "30% of carry distributions or more",
+        "escrow account of at least 30%"
+      ],
       "all capital back"
     ]
   }

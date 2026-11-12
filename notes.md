@@ -67,16 +67,35 @@ ILPA Template FAQs v1.1, 3i Group Annual Report FY2026. 760 chunks, 384-dimensio
 - Why consensus wins: with 760 chunks, rank 1 + rank 500 scores ~0.018, but rank 5 in both
   scores ~0.031. (On a 3-chunk toy example it is nearly a tie, so the toy example misleads.)
 
-### 9. Failure story: hybrid lost q01 ("What is the definition of fair value?")
-- Answer chunk (IPEV p75): embeddings rank 4 (just inside), BM25 not in the top 8,
-  hybrid rank 8.
-- Cause: "fair" and "value" appear on nearly every page of a valuation guideline, so their
-  IDF is low and BM25 can't separate chunks. RRF trusts both retrievers equally, so a
-  retriever that is guessing pulls the good result down.
-- Ideas: weighted RRF, or a cross-encoder reranker after fusion (Next step 2).
+### 9. (Corrected, see note 11) q01 looked like a hybrid failure, but wasn't
+- First reading: the p75 chunk with the expected phrase fell from rank 4 (embeddings) to 8
+  (hybrid), because "fair" and "value" are on nearly every page so BM25's IDF can't separate
+  chunks. That ranking is real, but hybrid retrieved IPEV p10 instead, which has the full
+  IFRS 13 definition in different words. The question was answered; the test said "miss".
+- Still true and worth knowing: RRF trusts both retrievers equally, so on a query where one
+  is guessing it can pull a good result down. Weighted RRF is the usual fix.
 
 ### 10. Process lessons
 - One results file is labelled chunk180-bm25 but its config says RETRIEVAL_MODE "embed".
   Checking the config line in each result catches this; the label alone can't be trusted.
 - VS Code saved a stale copy of retrieve.py over a fix (indentation error came back).
   If a file changed on disk, reload it before saving.
+
+### 11. The retrieval metric was too strict (biggest finding of Day 3)
+- Full hybrid run: answers 96% correct, but retrieval said 74%. Five "retrieval misses"
+  (q01, q06, q18, q19, q28) had correct answers with verbatim quotes. The citation check only
+  accepts quotes from retrieved chunks, so the facts must have been retrieved.
+- Cause: each expected phrase pinned the test to ONE passage, but these documents repeat
+  facts. NAV of 3,030p is on 3i p5, p6 and p10; the fair value definition is on IPEV p9, p10,
+  p75. Retrieving a different page that states the fact counted as a miss (false negative).
+- q19 was a chunk-boundary case: the backtesting passage was split, and hybrid retrieved
+  the second half, which answers the question.
+- Fix: an expected phrase can be a list of alternatives (any one counts). Every alternative
+  is copied from a passage that states the fact and checked to exist in the corpus.
+- Corrected retrieval at chunk 180: embeddings 74%, BM25 78%, hybrid 96%, embeddings top-8 91%.
+  The ranking didn't change, but hybrid at top 4 now beats embeddings at top 8.
+- The misses now tell the textbook story: embeddings miss exact terms (q12, q17, q24), BM25
+  misses paraphrases (q02, q28), fusion covers both. Only q27 (two-part question) remains.
+- Lessons: when two metrics disagree, suspect the metric. Write acceptable passages before
+  running experiments. Caveat: I added alternatives after seeing hybrid's results, which
+  carries some bias risk; it is limited because they also raised embeddings and BM25.

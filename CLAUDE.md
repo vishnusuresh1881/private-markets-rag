@@ -36,6 +36,7 @@ than speed.
   5 multi-passage); scores retrieval hit rate, correctness (LLM-as-judge), refusals, citations;
   saves results with the config used
 - eval/compare.py: prints all saved runs side by side
+- api/main.py: FastAPI service, POST /ask (X-API-Key) and GET /health
 - notes.md: my findings so far (read this for the detail)
 
 ## Running it (Mac)
@@ -47,6 +48,10 @@ than speed.
     python -m eval.run_eval --no-llm --label NAME   # retrieval only, free
     python -m eval.run_eval --label NAME            # full run, uses the API
     python -m eval.compare
+    # API (own terminal; it stays busy while running, Ctrl+C to stop)
+    export RAG_API_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
+    uvicorn api.main:app --reload       # then open http://127.0.0.1:8000/docs
+    # "Address already in use": an old uvicorn is still running; stop it first
 
 ## Results so far (retrieval hit rate, 23 answerable + multi-passage cases)
 Day 3 metric fix: expected_phrases can now list alternative phrasings of the same fact (the
@@ -73,13 +78,15 @@ Current config: CHUNK_WORDS 180, OVERLAP 30, TOP_K 4, RETRIEVAL_MODE "hybrid".
 3. README: results table, three failure analyses, known limits, and "what I'd change for
    production" (pgvector, reranking, monitoring, cost, access control, secrets management).
    Then make the GitHub repo public and add the link to my CV.
-4. API: wrap the pipeline in FastAPI.
-   - POST /ask (question in; answer, citations, retrieved passages out) and GET /health
-   - Pydantic request/response models (reuse AnswerResult)
-   - load the index once at startup, not per request
-   - error handling, logging of each question and its latency, an API key on the endpoint
-     (read from an environment variable)
-   - try it via the auto-generated docs at /docs
+4. API: DONE (Day 4), api/main.py, tested end to end via /docs.
+   - POST /ask (answer, citations, passages with scores, latency_ms) and GET /health
+   - Pydantic request/response models (reuse Citation from rag/answer.py)
+   - index, embedding model and BM25 loaded once at startup (lifespan + warm-up query)
+   - X-API-Key vs RAG_API_KEY: fail closed, secrets.compare_digest (timing-safe)
+   - 503 if Claude is unavailable or ANTHROPIC_API_KEY is missing (the library raises a
+     plain TypeError for a missing key, so it is checked explicitly)
+   - one log line per request (latency, found, citations); plain `def` endpoint so blocking
+     calls run in FastAPI's thread pool
 5. UI: a Streamlit page that CALLS THE API (not the Python code directly): question box,
    answer, quoted citations, retrieved passages with scores. Separate front end and back end.
 6. Optional: package with Docker so it runs the same anywhere.

@@ -3,3 +3,5 @@ numpy
 rank_bm25
 anthropic
 sentence-transformers
+fastapi
+uvicorn

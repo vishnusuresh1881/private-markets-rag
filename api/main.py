@@ -62,6 +62,14 @@ async def lifespan(app: FastAPI):
         log.warning("RAG_API_KEY is not set: every /ask request will be refused (401)")
     if not os.environ.get("ANTHROPIC_API_KEY"):
         log.warning("ANTHROPIC_API_KEY is not set: /ask will return 503")
+    # A pasted key with a trailing newline makes every Claude call fail with a vague
+    # "Connection error" (newlines are illegal in HTTP headers). Check names only, never values.
+    for name in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "RAG_API_KEY"):
+        value = os.environ.get(name)
+        if value and value != value.strip():
+            log.warning("%s has leading/trailing whitespace or a newline: re-set it", name)
+    if os.environ.get("ANTHROPIC_AUTH_TOKEN"):
+        log.warning("ANTHROPIC_AUTH_TOKEN is set: the SDK will also send it as a Bearer token")
     retrieve("warm up")              # loads chunks, embeddings, embedding model, BM25 into the cache
     chunks, _ = _load()
     log.info("Index loaded: %d chunks", len(chunks))

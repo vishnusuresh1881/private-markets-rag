@@ -37,21 +37,27 @@ than speed.
   saves results with the config used
 - eval/compare.py: prints all saved runs side by side
 - api/main.py: FastAPI service, POST /ask (X-API-Key) and GET /health
+- ui/app.py: Streamlit front end; calls the API over HTTP, never imports rag/
 - notes.md: my findings so far (read this for the detail)
 
 ## Running it (Mac)
     source .venv/bin/activate
-    export ANTHROPIC_API_KEY=...        # I type this myself
+    # Anthropic key: set without echo or trailing newline (paste, then Enter; run this line alone)
+    read -s "ANTHROPIC_API_KEY?Anthropic key: "; export ANTHROPIC_API_KEY; echo
     python -m rag.ingest                # only after changing docs or chunk settings
     python -m rag.retrieve "question"
     python -m rag.answer "question"
     python -m eval.run_eval --no-llm --label NAME   # retrieval only, free
     python -m eval.run_eval --label NAME            # full run, uses the API
     python -m eval.compare
-    # API (own terminal; it stays busy while running, Ctrl+C to stop)
-    export RAG_API_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
-    uvicorn api.main:app --reload       # then open http://127.0.0.1:8000/docs
+    # Once: RAG_API_KEY in .env (git-ignored) so API and UI get the identical key
+    python -c "import secrets; print('export RAG_API_KEY=' + secrets.token_urlsafe(32))" > .env
+    # Terminal 1, API (stays busy while running, Ctrl+C to stop):
+    source .env && uvicorn api.main:app --reload    # http://127.0.0.1:8000/docs
+    # Terminal 2, UI:
+    source .env && streamlit run ui/app.py          # http://localhost:8501
     # "Address already in use": an old uvicorn is still running; stop it first
+    # Programs read env vars at start: after changing a key, restart what uses it
 
 ## Results so far (retrieval hit rate, 23 answerable + multi-passage cases)
 Day 3 metric fix: expected_phrases can now list alternative phrasings of the same fact (the
@@ -87,8 +93,13 @@ Current config: CHUNK_WORDS 180, OVERLAP 30, TOP_K 4, RETRIEVAL_MODE "hybrid".
      plain TypeError for a missing key, so it is checked explicitly)
    - one log line per request (latency, found, citations); plain `def` endpoint so blocking
      calls run in FastAPI's thread pool
-5. UI: a Streamlit page that CALLS THE API (not the Python code directly): question box,
-   answer, quoted citations, retrieved passages with scores. Separate front end and back end.
+5. UI: DONE (Day 4), ui/app.py, tested end to end. Calls the API over HTTP only (the API
+   is the contract; the UI is one client). Health status in the sidebar, example questions,
+   answer or "not found", verified-quote count, sources with doc/page, retrieved passages
+   with RRF scores. Every HTTP failure (no server, 401, 422, 503, timeout) maps to a clear
+   message. The key is read server-side, never sent to the browser.
+   Debugging lesson: a pasted key with a trailing newline gave a vague "Connection error";
+   the API now warns at startup if any key has whitespace (names only, never values).
 6. Optional: package with Docker so it runs the same anywhere.
 7. Later: turn it into an LPA review agent (checklist-driven, structured Pydantic report).
 
